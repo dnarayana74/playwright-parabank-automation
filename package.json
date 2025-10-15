@@ -1,0 +1,18 @@
+{
+  "name": "playwright-parabank-automation",
+  "version": "1.0.0",
+  "main": "index.js",
+  "scripts": {
+    "test": "npx playwright test",
+    "test:ui": "npx playwright test tests/ui",
+    "test:api": "npx playwright test tests/api",
+    "setup": "node ./scripts/install-playwright.js"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "description": "",
+  "devDependencies": {
+   "@playwright/test": "^1.40.0"
+  }
+}
