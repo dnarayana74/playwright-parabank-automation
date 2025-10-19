@@ -13,4 +13,4 @@ class LoginPage {
     }
 }
 
-export default { LoginPage };
+module.exports = { LoginPage };
