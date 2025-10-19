@@ -5,7 +5,7 @@ export default defineConfig({
   timeout: 90_000,
   use: {
     headless: true,
-    baseURL: 'https://parabank.parasoft.com',
+    baseURL: 'http://localhost:9090',
     screenshot: 'only-on-failure',
     video: 'retain-on-failure',
   },
