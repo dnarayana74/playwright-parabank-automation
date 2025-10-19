@@ -1,4 +1,7 @@
-class RegistrationPage {
+// pages/RegistrationPage.js
+import fs from 'fs';
+
+export class RegistrationPage {
     constructor(page) {
         this.page = page;
     }
@@ -16,42 +19,37 @@ class RegistrationPage {
         await this.page.fill('#customer\\.password', user.password);
         await this.page.fill('#repeatedPassword', user.password);
 
-        // Click register and wait for confirmation
+        // Click Register and wait for navigation
         await Promise.all([
             this.page.waitForNavigation({ waitUntil: 'load' }),
-            this.page.click('input[value="Register"]')
+            this.page.click('input[value="Register"]'),
         ]);
 
-        // Confirm registration success message
+        // Confirm registration success
         const successMessage = this.page.locator('text=Your account was created successfully');
         if (await successMessage.count() > 0) {
-            console.log('Registration success message found');
+            console.log('Registration success message found.');
             await successMessage.waitFor({ state: 'visible', timeout: 5000 });
-        }
-
-        // Detect direct redirect to login page
-        const usernameField = this.page.locator('input[name="username"]');
-        if (await usernameField.count() > 0) {
-            console.log('Redirected directly to login page.');
-            await usernameField.waitFor({ state: 'visible', timeout: 10000 });
-            return;
-        }
-
-        // Navigate to login page if a link exists
-        const loginLink = this.page.locator('a[href*="login.htm"]');
-        if (await loginLink.count() > 0) {
-            console.log('🡒 Found login link, navigating...');
-            await Promise.all([
-                this.page.waitForLoadState('load'),
-                loginLink.click(),
-            ]);
         } else {
-            console.warn('Neither login link nor username field found, taking screenshot...');
-            await this.page.screenshot({ path: 'debug-registration.png', fullPage: true });
+            console.warn('⚠️ Registration message not found, continuing.');
         }
-        // Wait the username field on login
-        // await this.page.waitForSelector('input[name="username"]', { timeout: 60000 });
-    };
+
+        // Always navigate directly to login page
+        console.log('Navigating to login page manually...');
+        await this.page.goto('http://localhost:9090/login.htm', { waitUntil: 'domcontentloaded' });
+
+        // Debug HTML capture
+        console.log('Current URL:', this.page.url());
+        const html = await this.page.content();
+        fs.writeFileSync('debug-page.html', html);
+
+        // Wait for login form
+        await this.page.waitForSelector('input[name="username"]', {
+            timeout: 30000,
+            state: 'visible',
+        });
+        console.log('Reached login page.');
+    }
 }
 
-module.exports = { RegistrationPage };
+export default { RegistrationPage };

@@ -1,5 +1,5 @@
 const { test, expect } = require('@playwright/test');
-const { RegistrationPage } = require('../../pages/RegistrationPage.js');
+const { RegistrationPage } = require('../../pages/RegistrationPage.js').default;
 const { LoginPage } = require('../../pages/LoginPage.js');
 const { HomePage } = require('../../pages/HomePage.js');
 const { AccountPage } = require('../../pages/AccountPage.js');
